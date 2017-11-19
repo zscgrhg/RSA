@@ -6,7 +6,6 @@ import java.security.KeyStore;
 import java.security.PrivateKey;
 import java.security.PublicKey;
 import java.security.cert.Certificate;
-import java.util.Base64;
 
 public class RsaCrypto {
 
@@ -54,7 +53,6 @@ public class RsaCrypto {
     }
 
     public RsaCrypto(String keystorePath, String keystorePass, String keyPass, String alias) throws Exception {
-
         KeyStore keyStore = getKeyStore(keystorePath, keystorePass);
         PrivateKey privateKey = (PrivateKey) keyStore.getKey(alias, keyPass.toCharArray());
         Certificate certificate = keyStore.getCertificate(alias);
@@ -88,9 +86,5 @@ public class RsaCrypto {
         byte[] utf8s = rsaCrypto.getPublic().encrypt("nihao123".getBytes("utf8"));
         byte[] decrypt = rsaCrypto.getPrivate().decrypt(utf8s);
         System.out.println(new String(decrypt, "utf8"));
-        String base64 = "Y9/htZ6umL9JYNrNhxEz3HS4N2pQqbShCD18WTt8wgdYVvAXgxbHs7Dd+z9j46e/gdmEA4QUHdD643WVvoKQqDmxnO2EyaVkRrdTW8zuVVtaGaIMF14cKXEK" +
-                "G5S4f6npTNERRLyqE+AzzbHBYRkVM0BVy2Dek1JDDSYNKEfnbxE=";
-        byte[] decrypt1 = rsaCrypto.getPrivate().decrypt(Base64.getDecoder().decode(base64));
-        System.out.println(new String(decrypt1, "utf8"));
     }
 }
