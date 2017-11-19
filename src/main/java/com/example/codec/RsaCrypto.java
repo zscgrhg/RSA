@@ -6,6 +6,7 @@ import java.security.KeyStore;
 import java.security.PrivateKey;
 import java.security.PublicKey;
 import java.security.cert.Certificate;
+import java.util.Base64;
 
 public class RsaCrypto {
 
@@ -57,6 +58,8 @@ public class RsaCrypto {
         PrivateKey privateKey = (PrivateKey) keyStore.getKey(alias, keyPass.toCharArray());
         Certificate certificate = keyStore.getCertificate(alias);
         PublicKey publicKey = certificate.getPublicKey();
+        System.out.println(privateKey.getAlgorithm());
+        System.out.println(publicKey.getAlgorithm());
         this.privateCrypto = new PrivateCrypto(privateKey);
         this.publicCrypto = new PublicCrypto(publicKey);
     }
@@ -83,8 +86,13 @@ public class RsaCrypto {
         String keyPass = "mykeypass";
         String alias = "appweb";
         RsaCrypto rsaCrypto = new RsaCrypto(keystorePath, keystorePass, keyPass, alias);
-        byte[] utf8s = rsaCrypto.getPublic().encrypt("nihao123".getBytes("utf8"));
-        byte[] decrypt = rsaCrypto.getPrivate().decrypt(utf8s);
-        System.out.println(new String(decrypt, "utf8"));
+        String data="kkHhA7yrHC2yh5fL25q8Q+3UdWtb+oH8Rrrg8yQ3A45D7Ra58ITrza2YRC3+rMIZj4zyv1vBGtKF/3cERGcYevYQNYvhINTYuYjmoyBoxd97v8Y3e+IIm0pSTNL5BYgYCmUFJWJgOQUUJmDY9JbGsZqvISuL+SehCJL5Qkm8nGo=";
+        rsaCrypto.getPrivate().decrypt(Base64.getDecoder().decode(data));
+        /*for (int i = 0; i < 10; i++) {
+            byte[] utf8s = rsaCrypto.getPublic().encrypt("nihao123".getBytes("utf8"));
+            System.out.println(Base64.getEncoder().encodeToString(utf8s));
+            byte[] decrypt = rsaCrypto.getPrivate().decrypt(utf8s);
+            System.out.println(new String(decrypt, "utf8"));
+        }*/
     }
 }

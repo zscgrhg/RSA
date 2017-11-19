@@ -5,8 +5,8 @@ set "KEYPASS=mykeypass"
 set "STOREPATH=appweb.jks"
 set "VALIDITY=3650"
 set "ALIAS=appweb"
-set "KEYALG=rsa"
-set "KEYSIZE=1024"
+set KEYALG="RSA"
+set "KEYSIZE=2048"
 
 if  exist "%STOREPATH%" goto end
 
