@@ -1,11 +1,14 @@
 package com.example.codec;
 
 import javax.crypto.Cipher;
+import javax.crypto.spec.OAEPParameterSpec;
+import javax.crypto.spec.PSource;
 import java.io.FileInputStream;
 import java.security.KeyStore;
 import java.security.PrivateKey;
 import java.security.PublicKey;
 import java.security.cert.Certificate;
+import java.security.spec.MGF1ParameterSpec;
 import java.util.Base64;
 
 public class RsaCrypto {
@@ -23,7 +26,8 @@ public class RsaCrypto {
 
         public byte[] decrypt(byte[] encrypted) throws Exception {
             Cipher cipher = Cipher.getInstance(OAEP_ALG);
-            cipher.init(cipher.DECRYPT_MODE, privateKey);
+            cipher.init(cipher.DECRYPT_MODE, privateKey, new OAEPParameterSpec("SHA-256", "MGF1", MGF1ParameterSpec.SHA256,
+                    PSource.PSpecified.DEFAULT));
             return cipher.doFinal(encrypted);
         }
 

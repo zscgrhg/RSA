@@ -9,9 +9,11 @@ var encryptAlgorithm = {
 };
 
 function arrayBufferToBase64String(arrayBuffer) {
+    console.log(arrayBuffer);
     var byteArray = new Uint8Array(arrayBuffer)
     var byteString = '';
     for (var i = 0; i < byteArray.byteLength; i++) {
+        console.log(byteArray[i])
         byteString += String.fromCharCode(byteArray[i]);
     }
     return btoa(byteString);

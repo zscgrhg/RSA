@@ -8,12 +8,16 @@ import java.math.BigInteger;
 import java.security.KeyFactory;
 import java.security.PrivateKey;
 import java.security.PublicKey;
+import java.security.Security;
 import java.security.spec.RSAPrivateCrtKeySpec;
 import java.security.spec.RSAPublicKeySpec;
 import java.util.Base64;
 
 public class OpenRsaLoader {
-    public static void main(String[] args) throws Exception{
+    public static void main(String[] args) throws Exception {
+
+        Security.addProvider(new org.bouncycastle.jce.provider.BouncyCastleProvider());
+
         String keyinfo = "MIIEowIBAAKCAQEAuTX5ddvxajZ/0QGGNT8sgy25GIlKmQnvc00PNbmiH6qQTJxN\n" +
                 "u7nMUdL5kG31NmtyYlhPAv4wFaYJ9MKFTSWooGgA5XR0BCGbeU2tFXG3o4BxTHj4\n" +
                 "YaplACPah6iTQlK/rjjhj+eW13Ri0IE6YlvrQYUkgQSt0+SdyRQH7s1I6a8nekKe\n" +
@@ -62,22 +66,25 @@ public class OpenRsaLoader {
                 new RSAPublicKeySpec(modulus, publicExponent);
         PublicKey publicKey = keyFactory.generatePublic(rsaPublicKeySpec);
         RSAPrivateCrtKeySpec rsaPrivateKeySpec =
-                new RSAPrivateCrtKeySpec(modulus,publicExponent,privateExponent,
-                        primeP,primeQ,primeExponentP,primeExponentQ,crtCoefficient);
+                new RSAPrivateCrtKeySpec(modulus, publicExponent, privateExponent,
+                        primeP, primeQ, primeExponentP, primeExponentQ, crtCoefficient);
         PrivateKey privateKey = keyFactory.generatePrivate(rsaPrivateKeySpec);
         System.out.println(privateKey);
         System.out.println(privateKey.getAlgorithm());
 
         RsaCrypto.PublicCrypto publicCrypto = new RsaCrypto.PublicCrypto(publicKey);
-        byte[] encrypt = publicCrypto.encrypt("nihao123".getBytes());
-
-
         RsaCrypto.PrivateCrypto privateCrypto = new RsaCrypto.PrivateCrypto(privateKey);
-        byte[] decrypt1 = privateCrypto.decrypt(encrypt);
-        System.out.println(new String(decrypt1));
 
-        String data="SD0MXR7HnyCaTutHjZxFx9JFZG7vF8/ZDeioHP5UhSRS3wsQdUSalXHW95MY/6dDdpzS5vVQ8TJ1+SvtpAnNKNH7vVqvfwyxJESkBMfdIW5Ilg9ddEGDAFN3BQ5P1I0bK9loQm+2KOaMhlorwqI/dsVQcuCqg6nnv+XfI5XeH+TCxt3m8vtXMHFmrUJe5y7i9NIiLJ55BtspwUKPqNw9dEGQ9Ag84Xa34PfZMxIWxiub1EqvVCkPqZSbi76xZN/tDTVSTZS04sfUNRVYnWX1O6wscCahb3TBjouT6Z1vHhWNaQ1BfqvutheksgTY3H9d4YLcl9lMdBiWxZKgeTCMUw==";
-        byte[] decrypt = privateCrypto.decrypt(Base64.getDecoder().decode(data));
+//        byte[] encrypt = publicCrypto.encrypt("nihao123".getBytes());
+//
+//
+//
+//        byte[] decrypt1 = privateCrypto.decrypt(encrypt);
+//        System.out.println(new String(decrypt1));
+
+        String data = "QETh7VKnFySI8QZY6O5AI4y1ozfZQsMC98jFhITZmf4wYs8E8IcvISlaTU+J/kK+HlWq+Xt1ShqIvWhnv3V9zsGVF5QXT0eL1GM+90LtbkYCZDMA6qBhZbXcZaps/q+onQubsoqRfD3gAcN8M/JQz4viHPCaeXczIzFZxsdSHuFLHI1ZgsVyhRaAxnPQST8XwH/aUgpjgAuwsnPLrnB8QidFIc1aw16zTtaXKRXsqMyhtdYK+VsOaNv3X0gUU345qYmESCJ73wsau3CWQmLkxmDG5xA1XCIo3GOPF59q0MHMV+FMNJJL7SxAAVLuptZvfjwiHpqx6xyfZuPhx520iA==";
+        byte[] decode = Base64.getDecoder().decode(data);
+        byte[] decrypt = privateCrypto.decrypt(decode);
         System.out.println(new String(decrypt));
     }
 }
