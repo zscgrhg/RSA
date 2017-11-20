@@ -13,9 +13,15 @@ import java.util.Base64;
 
 public class RsaCrypto {
 
-    public static final String OAEP_ALG="RSA/ECB/OAEPWithSHA-1AndMGF1Padding";
+    public static final String OAEP_ALG = "RSA/ECB/OAEPWithSHA-1AndMGF1Padding";
     private final Crypto privateCrypto;
     private final Crypto publicCrypto;
+    private static final OAEPParameterSpec oaepParameterSpec =
+            new OAEPParameterSpec("SHA-256",
+                    "MGF1",
+                    MGF1ParameterSpec.SHA256,
+                    PSource.PSpecified.DEFAULT);
+
 
     public static class PrivateCrypto implements Crypto {
         private final PrivateKey privateKey;
@@ -26,14 +32,13 @@ public class RsaCrypto {
 
         public byte[] decrypt(byte[] encrypted) throws Exception {
             Cipher cipher = Cipher.getInstance(OAEP_ALG);
-            cipher.init(cipher.DECRYPT_MODE, privateKey, new OAEPParameterSpec("SHA-256", "MGF1", MGF1ParameterSpec.SHA256,
-                    PSource.PSpecified.DEFAULT));
+            cipher.init(cipher.DECRYPT_MODE, privateKey, oaepParameterSpec);
             return cipher.doFinal(encrypted);
         }
 
         public byte[] encrypt(byte[] data) throws Exception {
             Cipher cipher = Cipher.getInstance(OAEP_ALG);
-            cipher.init(Cipher.ENCRYPT_MODE, privateKey);
+            cipher.init(Cipher.ENCRYPT_MODE, privateKey, oaepParameterSpec);
             return cipher.doFinal(data);
         }
     }
@@ -47,13 +52,13 @@ public class RsaCrypto {
 
         public byte[] decrypt(byte[] encrypted) throws Exception {
             Cipher cipher = Cipher.getInstance(OAEP_ALG);
-            cipher.init(Cipher.DECRYPT_MODE, publicKey);
+            cipher.init(Cipher.DECRYPT_MODE, publicKey, oaepParameterSpec);
             return cipher.doFinal(encrypted);
         }
 
         public byte[] encrypt(byte[] data) throws Exception {
             Cipher cipher = Cipher.getInstance(OAEP_ALG);
-            cipher.init(Cipher.ENCRYPT_MODE, publicKey);
+            cipher.init(Cipher.ENCRYPT_MODE, publicKey, oaepParameterSpec);
             return cipher.doFinal(data);
         }
     }
@@ -91,7 +96,7 @@ public class RsaCrypto {
         String keyPass = "mykeypass";
         String alias = "appweb";
         RsaCrypto rsaCrypto = new RsaCrypto(keystorePath, keystorePass, keyPass, alias);
-        String data="kkHhA7yrHC2yh5fL25q8Q+3UdWtb+oH8Rrrg8yQ3A45D7Ra58ITrza2YRC3+rMIZj4zyv1vBGtKF/3cERGcYevYQNYvhINTYuYjmoyBoxd97v8Y3e+IIm0pSTNL5BYgYCmUFJWJgOQUUJmDY9JbGsZqvISuL+SehCJL5Qkm8nGo=";
+        String data = "kkHhA7yrHC2yh5fL25q8Q+3UdWtb+oH8Rrrg8yQ3A45D7Ra58ITrza2YRC3+rMIZj4zyv1vBGtKF/3cERGcYevYQNYvhINTYuYjmoyBoxd97v8Y3e+IIm0pSTNL5BYgYCmUFJWJgOQUUJmDY9JbGsZqvISuL+SehCJL5Qkm8nGo=";
         rsaCrypto.getPrivate().decrypt(Base64.getDecoder().decode(data));
         /*for (int i = 0; i < 10; i++) {
             byte[] utf8s = rsaCrypto.getPublic().encrypt("nihao123".getBytes("utf8"));

@@ -74,13 +74,9 @@ public class OpenRsaLoader {
 
         RsaCrypto.PublicCrypto publicCrypto = new RsaCrypto.PublicCrypto(publicKey);
         RsaCrypto.PrivateCrypto privateCrypto = new RsaCrypto.PrivateCrypto(privateKey);
-
-//        byte[] encrypt = publicCrypto.encrypt("nihao123".getBytes());
-//
-//
-//
-//        byte[] decrypt1 = privateCrypto.decrypt(encrypt);
-//        System.out.println(new String(decrypt1));
+        byte[] encrypt = publicCrypto.encrypt("nihao123".getBytes());
+        byte[] decrypt1 = privateCrypto.decrypt(encrypt);
+        System.out.println(new String(decrypt1));
 
         String data = "QETh7VKnFySI8QZY6O5AI4y1ozfZQsMC98jFhITZmf4wYs8E8IcvISlaTU+J/kK+HlWq+Xt1ShqIvWhnv3V9zsGVF5QXT0eL1GM+90LtbkYCZDMA6qBhZbXcZaps/q+onQubsoqRfD3gAcN8M/JQz4viHPCaeXczIzFZxsdSHuFLHI1ZgsVyhRaAxnPQST8XwH/aUgpjgAuwsnPLrnB8QidFIc1aw16zTtaXKRXsqMyhtdYK+VsOaNv3X0gUU345qYmESCJ73wsau3CWQmLkxmDG5xA1XCIo3GOPF59q0MHMV+FMNJJL7SxAAVLuptZvfjwiHpqx6xyfZuPhx520iA==";
         byte[] decode = Base64.getDecoder().decode(data);
